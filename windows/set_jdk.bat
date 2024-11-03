@@ -1,10 +1,8 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: Define the JDK paths
-set "jdk1=C:\Java\jdk17"
-set "jdk2=C:\Java\jdk21"
-set "jdk3=C:\Java\jdk22"
+:: Define the parent directory where JDK versions are installed
+set "jdk_dir=C:\Program Files\Java"
 
 :: Function to display the menu
 :menu
@@ -31,15 +29,15 @@ if "%choice%"=="6" exit /b
 goto menu
 
 :setjdk1
-set "JAVA_HOME=%jdk1%"
+set "JAVA_HOME=C:\Program Files\Java\jdk17"
 goto setjdk
 
 :setjdk2
-set "JAVA_HOME=%jdk2%"
+set "JAVA_HOME=C:\Program Files\Java\jdk21"
 goto setjdk
 
 :setjdk3
-set "JAVA_HOME=%jdk3%"
+set "JAVA_HOME=C:\Program Files\Java\jdk22"
 goto setjdk
 
 :setjdk
@@ -51,9 +49,13 @@ goto menu
 :listjdk
 echo ==========================
 echo Installed JDK Versions:
-echo 1. JDK 17: %jdk1%
-echo 2. JDK 21: %jdk2%
-echo 3. JDK 22: %jdk3%
+for /d %%D in ("%jdk_dir%\*") do (
+    if exist "%%D\bin\java.exe" (
+        set "jdk_path=%%D"
+        set "jdk_version=%%~nxD"
+        echo !jdk_version!: !jdk_path!
+    )
+)
 echo ==========================
 pause
 goto menu
